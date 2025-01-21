@@ -2,14 +2,21 @@ from typing import Optional, List
 from fastapi import FastAPI, HTTPException, Path, Query, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import uvicorn
+import time
+import random
 
 # Initialize FastAPI app
 app = FastAPI()
 
 # Initialize Jinja2 templates
 templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Add a variable to store the count
+stored_count = 0
 
 # --- Pydantic Models for Request/Response ---
 class Item(BaseModel):
@@ -88,6 +95,40 @@ async def handle_form(
             "interests": interests
         }
     }
+
+# Add new route for the counter page
+@app.get("/counter")
+async def counter_page(request: Request):
+    """Serve the counter.html template"""
+    return templates.TemplateResponse("counter.html", {"request": request})
+
+# Add routes for counter functionality
+@app.get("/get_count")
+async def get_count():
+    """Return the current count"""
+    return JSONResponse({"count": stored_count})
+
+@app.post("/save_count")
+async def save_count(data: dict):
+    """Save the count to the server"""
+    global stored_count
+    stored_count = data.get("count", 0)
+    return JSONResponse({
+        "message": f"Count saved successfully: {stored_count}"
+    })
+
+# Add new route for the counter page
+@app.get("/cart")
+async def cart_page(request: Request):
+    """Serve the counter.html template"""
+    return templates.TemplateResponse("cart.html", {"request": request})
+
+@app.get("/api/price")
+def get_price():
+    """Return the price of an item"""
+    # wait a random amount of time between 1 and 5 seconds
+    time.sleep(random.randint(1, 5))
+    return JSONResponse({"price": 10.99})
 
 # Run the server
 if __name__ == "__main__":

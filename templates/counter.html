@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Counter Demo</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .counter {
+            font-size: 48px;
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #saveStatus {
+            margin-top: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Counter Demo</h1>
+        <p>Shows how JavaScript interacts with FastAPI</p>
+        
+        <div class="counter" id="counterDisplay">0</div>
+        
+        <button onclick="updateCounter(1)">Increment</button>
+        <button onclick="updateCounter(-1)">Decrement</button>
+        <button onclick="saveCounter()">Save to Server</button>
+        
+        <div id="saveStatus"></div>
+        <div id="connectionStatus"></div>
+    </div>
+
+    
+    <script src="{{ url_for('static', path='js/counter.js') }}"></script>
+</body>
+</html>
