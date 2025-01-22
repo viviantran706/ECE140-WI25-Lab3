@@ -51,6 +51,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Initialize the page
     logDebug('Page initialization started');
+    // Add event listeners for buttons:
+    document.getElementById('increase-btn').addEventListener('click', increaseQuantity);
+    document.getElementById('decrease-btn').addEventListener('click', decreaseQuantity);
+
     initializePrice();
     updateDisplay();
 });
