@@ -13,7 +13,26 @@ document.addEventListener("DOMContentLoaded", function() {
     // Initialize price (with bug!)
     async function initializePrice() {
         logDebug('Starting price initialization...');
-        
+        try {
+            // Fetch the price from the server
+            const response = await fetch('/api/price');
+            if (!response.ok) {
+                throw new Error(`Failed to fetch price: ${response.status}`);
+            }
+
+            const data = await response.json();
+            productPrice = data.price;
+
+            // Update the displayed price
+            document.getElementById('product-price').textContent = productPrice.toFixed(2);
+            logDebug(`Price initialized to: $${productPrice}`);
+
+            // Update the total display
+            updateTotal();
+            logDebug('Price initialization function completed');
+        } catch (error) {
+            logDebug(`Error during price initialization: ${error.message}`);
+        }
         // Bug: 
         response = fetch('/api/price?')
         data = response.json()
