@@ -39,13 +39,29 @@ async function saveCounter() {
 // Initialize counter from server when page loads
 async function initializeCounter() {
     try {
-        
-        count = 0; // get this from the server at /get_count
-        counterDisplay.textContent = count;
+        const response = await fetch('/save_count', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ count: count })
+        });
+
+        const data = await response.json();
+        saveStatus.textContent = data.message;
     } catch (error) {
-        console.error('Error initializing counter:', error);
+        saveStatus.textContent = 'Error saving count';
+        saveStatus.style.color = 'red';
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCounter();
+});
+
+window.onload = function () {
+    alert("Welcome to the Counter App!"); // Pop-up alert when the page loads
+};
 
 function setConnectionStatus() {
     // once server counter is initialized with data from server
